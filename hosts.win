@@ -9,3 +9,5 @@ ansible_user = "ansible@HOME.LAB"
 ansible_password = "q1w2e3R$"
 ansible_winrm_server_cert_validation = "ignore"
 ansible_winrm_transport = ssl
+
+zbx_server=zbx.home.lab

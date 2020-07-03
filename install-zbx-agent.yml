@@ -1,5 +1,6 @@
 - name: Install Zabbix Agent
   hosts: windows
+  gather_facts: False
   tasks:
 
   - name: Create Temporary Directory to Download Zabbix Agent Package
@@ -31,3 +32,16 @@
       state: absent
     with_items:
       - "{{ temp.path }}"
+
+  - name: Create Config File from a Jinja2 template
+    win_template:
+      src: templates/zabbix_agentd.conf.j2
+      dest: C:\zabbix_agent\conf\zabbix_agentd.conf
+
+  - name: Install Zabbix Agent Service
+    win_shell: C:\zabbix_agent\bin\zabbix_agentd.exe -c C:\zabbix_agent\conf\zabbix_agentd.conf -i
+
+  - name: Start Zabbix Agent Service
+    win_shell: C:\zabbix_agent\bin\zabbix_agentd.exe -s
+
+
