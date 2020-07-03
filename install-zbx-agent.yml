@@ -2,7 +2,7 @@
   hosts: windows
   tasks:
 
-  - name: Create temporary build directory
+  - name: Create Temporary Directory to Download Zabbix Agent Package
     win_tempfile:
       state: directory
       suffix: zabbix-agent
@@ -25,5 +25,9 @@
     with_items:
       - "{{ temp.path }}"
 
-  - debug:
-      var: temp.path
+  - name: Remove Temporary Directory
+    win_file:
+      path: "{{ item }}"
+      state: absent
+    with_items:
+      - "{{ temp.path }}"
