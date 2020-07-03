@@ -1,0 +1,29 @@
+- name: Install Zabbix Agent
+  hosts: windows
+  tasks:
+
+  - name: Create temporary build directory
+    win_tempfile:
+      state: directory
+      suffix: zabbix-agent
+    register: temp
+
+  - name: Download Zabbix Agent Package and checksum
+    win_get_url:
+      url: https://www.zabbix.com/downloads/5.0.1/zabbix_agent-5.0.1-windows-amd64.zip
+      dest: "{{ item }}\\zabbix_agent.zip"
+      checksum: 552cff6e3d794d790d1e27e6de33e368fb0bbe45
+      checksum_algorithm: sha1
+      force: True
+    with_items:
+      - "{{ temp.path }}"
+
+  - name: Unzip Zabbix Agent Package
+    win_unzip:
+      src: "{{ item }}\\zabbix_agent.zip"
+      dest: C:\zabbix_agent
+    with_items:
+      - "{{ temp.path }}"
+
+  - debug:
+      var: temp.path
