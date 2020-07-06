@@ -1,0 +1,13 @@
+- name: Install Zabbix Agent
+  hosts: windows
+  gather_facts: false
+  tasks:
+
+  - name: Create a new host or update an existing host's info
+    local_action:
+      module: zabbix_host
+      server_url: http://zbx.home.lab/zabbix
+      login_user: ansible
+      login_password: ansible
+      host_name: "{{ inventory_hostname }}"
+      state: absent

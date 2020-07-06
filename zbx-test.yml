@@ -1,0 +1,16 @@
+- name: Install Zabbix Agent
+  hosts: localhost
+  gather_facts: True
+  tasks:
+
+  - name: Get host info
+    local_action:
+      module: zabbix_host_info
+      server_url: http://zbx.home.lab/zabbix
+      login_user: username
+      login_password: password
+      host_name: ExampleHost
+      host_ip: 127.0.0.1
+      timeout: 10
+      exact_match: no
+      remove_duplicate: yes

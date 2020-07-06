@@ -1,0 +1,16 @@
+- name: Uninstall Zabbix Agent
+  hosts: windows
+  gather_facts: False
+  tasks:
+
+  - name: Stop Zabbix Agent Service
+    win_shell: C:\zabbix_agent\bin\zabbix_agentd.exe -x
+
+  - name: Uninstall Zabbix Agent Service
+    win_shell: C:\zabbix_agent\bin\zabbix_agentd.exe -d
+
+  - name: Remove Zabbix Agent Directory
+    win_file:
+      path: C:\zabbix_agent
+      state: absent
+

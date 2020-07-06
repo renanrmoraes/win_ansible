@@ -1,0 +1,5 @@
+---
+
+- import_playbook: install-zbx-agent.yml
+
+- import_playbook: add-hosts-zbx.yml

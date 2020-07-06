@@ -1,0 +1,13 @@
+---
+- hosts: windows
+  tasks:
+  - name: Collect only facts returned by facter
+    setup:
+      gather_subset:
+        - all
+#        - '!any'
+#        - network
+#        - facter
+    register: vminfo
+
+  - debug: var=vminfo

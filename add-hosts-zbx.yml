@@ -1,0 +1,42 @@
+- name: Install Zabbix Agent
+  hosts: windows
+  gather_facts: True
+  tasks:
+
+  - name: Collect only facts returned by facter
+    setup:
+      gather_subset:
+        - '!all'
+        - '!any'
+        - network
+        - facter
+    register: vminfo
+
+  - name: Create a new host or update an existing host's info
+    local_action:
+      module: zabbix_host
+      server_url: http://zbx.home.lab/zabbix
+      login_user: ansible
+      login_password: ansible
+      host_name: "{{ inventory_hostname }}"
+      visible_name: "{{ inventory_hostname }}"
+      description:
+      host_groups:
+        - Servers
+      link_templates:
+        - Template OS Windows by Zabbix agent
+      status: enabled
+      state: present
+      inventory_mode: manual
+      inventory_zabbix:
+        type: "{{ vminfo.ansible_facts.ansible_os_product_type }}"
+        alias: "{{ vminfo.ansible_facts.ansible_netbios_name }}"
+        os: "{{ vminfo.ansible_facts.ansible_os_name }}"
+        hardware: "{{ vminfo.ansible_facts.ansible_system_vendor }}"	
+      interfaces:
+        - type: 1
+          main: 1
+          useip: 1
+          ip: "{{ vminfo.ansible_facts.ansible_ip_addresses[0] }}"
+          dns: "{{ inventory_hostname }}"
+          port: 10050
